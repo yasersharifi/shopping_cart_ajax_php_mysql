@@ -1,0 +1,23 @@
+.yas-box-shadow {
+    box-shadow: 0 8px 22px 1px #eee;
+    transition: all ease 0.1s;
+}
+.yas-box-shadow-nh {
+    box-shadow: 0 8px 22px 1px #eee;
+    transition: all ease 0.1s;
+}
+.yas-box-shadow:hover {
+    box-shadow: 0 8px 22px 5px #eee;
+}
+.yas-font-size-10 {
+    font-size: 10px;
+}
+.yas-height-250 {
+    height: 250px !important;
+}
+.footer {
+    text-align: center;
+}
+.contactIcon {
+    font-size: 30px;
+}
