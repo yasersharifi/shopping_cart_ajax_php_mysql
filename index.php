@@ -166,6 +166,23 @@ $productsItem = $productsObject->get();
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on("click", ".addToCart", function (e) {
+            e.preventDefault();
+            let productId = $(this).prev("input").val();
+            
+            $.ajax({
+                url: "functions/cart/addToCart.php",
+                method: "POST",
+                data: {action: "addToCart", productId: productId},
+                success: function (response) {
+                    console.log(response)
+                }
+            });
+        })
+    });
+</script>
 
 </body>
 </html>

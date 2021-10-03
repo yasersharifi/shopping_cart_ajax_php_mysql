@@ -22,4 +22,16 @@ class Products extends DbConnection
         }
         return $data;
     }
+
+    public function getById($id) {
+        $sql = "SELECT * FROM {$this->table} WHERE id = :id";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
+        $statement->execute();
+        $publisher = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($publisher)
+            return (object) $publisher;
+        return false;
+    }
 }
