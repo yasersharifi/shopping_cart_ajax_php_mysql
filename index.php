@@ -1,3 +1,8 @@
+<?php
+include_once "Products.php";
+$productsObject = new Products();
+$productsItem = $productsObject->get();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,7 +30,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="cart.html">Cart</a>
@@ -65,7 +70,7 @@
                         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
                              aria-label="breadcrumb">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Shop</li>
                             </ol>
                         </nav>
@@ -103,13 +108,14 @@
                 </div>
                 <hr>
                 <div class="row">
+                    <?php if (! empty($productsItem)): foreach ($productsItem as $item): ?>
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card border-0 yas-box-shadow">
-                            <img src="assets/images/1.jpeg" class="card-img-top yas-height-250" alt="...">
+                            <img src="assets/images/<?= $item->image; ?>" class="card-img-top yas-height-250" alt="...">
                             <div class="card-body">
-                                <h6 class="card-title">Laptop Sony</h6>
+                                <h6 class="card-title"><?= $item->name; ?></h6>
                                 <div class="card-text d-flex flex-row justify-content-between align-items-center my-3">
-                                    <span><sup>$</sup>600</span>
+                                    <span><sup>$</sup><?= number_format($item->price); ?></span>
                                     <span>
                                         <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
                                         <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
@@ -118,97 +124,16 @@
                                         <i class="bi bi-star text-warning yas-font-size-10"></i>
                                     </span>
                                 </div>
-                                <a href="#" class="btn btn-warning text-light d-flex justify-content-center">Add To Cart
-                                    <i class="bi bi-cart ms-3"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="card border-0 yas-box-shadow">
-                            <img src="assets/images/3.jpeg" class="card-img-top yas-height-250" alt="...">
-                            <div class="card-body">
-                                <h6 class="card-title">Laptop Sony</h6>
-                                <div class="card-text d-flex flex-row justify-content-between align-items-center my-3">
-                                    <span><sup>$</sup>600</span>
-                                    <span>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                    </span>
+                                <div class="d-grid">
+                                    <input type="hidden" class="productId" value="<?= $item->id; ?>">
+                                    <button class="addToCart btn btn-warning text-light d-flex justify-content-center">Add To Cart
+                                        <i class="bi bi-cart ms-3"></i>
+                                    </button>
                                 </div>
-                                <a href="#" class="btn btn-warning text-light d-flex justify-content-center">Add To Cart
-                                    <i class="bi bi-cart ms-3"></i></a>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="card border-0 yas-box-shadow">
-                            <img src="assets/images/4.jpeg" class="card-img-top yas-height-250" alt="...">
-                            <div class="card-body">
-                                <h6 class="card-title">Laptop Sony</h6>
-                                <div class="card-text d-flex flex-row justify-content-between align-items-center my-3">
-                                    <span><sup>$</sup>600</span>
-                                    <span>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                    </span>
-                                </div>
-                                <a href="#" class="btn btn-warning text-light d-flex justify-content-center">Add To Cart
-                                    <i class="bi bi-cart ms-3"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="card border-0 yas-box-shadow">
-                            <img src="assets/images/3.jpeg" class="card-img-top yas-height-250" alt="...">
-                            <div class="card-body">
-                                <h6 class="card-title">Laptop Sony</h6>
-                                <div class="card-text d-flex flex-row justify-content-between align-items-center my-3">
-                                    <span><sup>$</sup>600</span>
-                                    <span>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                    </span>
-                                </div>
-                                <a href="#" class="btn btn-warning text-light d-flex justify-content-center">Add To Cart
-                                    <i class="bi bi-cart ms-3"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
-                        <div class="card border-0 yas-box-shadow">
-                            <img src="assets/images/2.jpeg" class="card-img-top yas-height-250" alt="...">
-                            <div class="card-body">
-                                <h6 class="card-title">Laptop Sony</h6>
-                                <div class="card-text d-flex flex-row justify-content-between align-items-center my-3">
-                                    <span><sup>$</sup>600</span>
-                                    <span>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star-fill text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                        <i class="bi bi-star text-warning yas-font-size-10"></i>
-                                    </span>
-                                </div>
-                                <a href="#" class="btn btn-warning text-light d-flex justify-content-center">Add To Cart
-                                    <i class="bi bi-cart ms-3"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-
+                    <?php endforeach; endif; ?>
                 </div>
             </div>
         </div>
