@@ -15,6 +15,10 @@
 .yas-height-250 {
     height: 250px !important;
 }
+.yas-box-shadow-unset, .yas-box-shadow-unset:focus {
+    box-shadow: unset !important;
+}
+.yas-border-radius-5 {border-radius: 5px;}
 .footer {
     text-align: center;
 }
