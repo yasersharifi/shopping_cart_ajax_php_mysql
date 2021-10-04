@@ -1,7 +1,12 @@
 <?php
 include_once "Products.php";
+include_once "Cart.php";
 $productsObject = new Products();
 $productsItem = $productsObject->get();
+
+// instance of cart
+$cartObject = new Cart();
+$cartCount = $cartObject->countCart();
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,7 +25,7 @@ $productsItem = $productsObject->get();
 </head>
 <body>
 <!-- start top header -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand text-warning" href="#">Shopping Cart</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -52,7 +57,7 @@ $productsItem = $productsObject->get();
             </ul>
             <form class="d-flex">
                 <button class="btn btn-success" type="submit"><i class="bi bi-cart me-2"></i>Cart(<span
-                        class="cartCount">3</span>)
+                        class="cartCount"><?= $cartCount; ?></span>)
                 </button>
             </form>
         </div>
@@ -61,7 +66,7 @@ $productsItem = $productsObject->get();
 <!-- end top header -->
 
 <!--start breadcrumb -->
-<section id="breadcrumb">
+<section id="breadcrumb" style="margin-top: 85px">
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
@@ -104,6 +109,11 @@ $productsItem = $productsObject->get();
                             <input type="text" class="form-control form-control-lg yas-box-shadow-unset yas-border-0">
                             <input type="submit" value="Search" class="btn btn-warning yas-border-radius-0 text-white">
                         </form>
+                    </div>
+                </div>
+                <div class="row" id="message" style="display: none">
+                    <div class="col-12">
+                        <div class="alert" id="messageDiv"></div>
                     </div>
                 </div>
                 <hr>
@@ -175,9 +185,22 @@ $productsItem = $productsObject->get();
             $.ajax({
                 url: "functions/cart/addToCart.php",
                 method: "POST",
-                data: {action: "addToCart", productId: productId},
+                data: {action: "addToCart", productId: productId, quantity: 1},
                 success: function (response) {
-                    console.log(response)
+                    let data = JSON.parse(response)[0];
+                    console.log(data)
+                    if (data["status"] == "ok") {
+                        $("#message").css({display: "block"});
+                        $("#messageDiv").addClass("alert-success");
+                        $("#messageDiv").text(data["message"]);
+                        // change cart counter
+                        $(".cartCount").text(data["cartCount"]);
+
+                    } else {
+                        $("#message").css({display: "block"});
+                        $("#messageDiv").addClass("alert-danger");
+                        $("#messageDiv").text(data["message"]);
+                    }
                 }
             });
         })
