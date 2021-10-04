@@ -2,7 +2,7 @@
 include_once "Products.php";
 include_once "Cart.php";
 $productsObject = new Products();
-$productsItem = $productsObject->get();
+$productsItem = $productsObject->findAll();
 
 // instance of cart
 $cartObject = new Cart();

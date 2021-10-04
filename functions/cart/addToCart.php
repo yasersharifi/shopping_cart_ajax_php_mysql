@@ -6,15 +6,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $productsObject = new Products();
     $cartObject = new Cart();
 
+    $response = [];
+
     if (isset($_POST["action"]) && $_POST["action"] == "addToCart") {
         $productId = $_POST["productId"];
         $quantity = $_POST["quantity"];
 
-        $productInfo = $productsObject->getById($productId);
+        $productInfo = $productsObject->findById($productId);
         $productPrice = $productInfo->price;
         $totalPrice = $productPrice * $quantity;
 
-        $cartInfo = $cartObject->getByProductId($productId);
+        $cartInfo = $cartObject->findByProductId($productId);
 
 
 

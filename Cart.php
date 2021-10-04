@@ -11,7 +11,7 @@ class Cart extends DbConnection
         $this->table = "cart";
     }
 
-    public function get() {
+    public function findAll() {
         $select = $this->connection->prepare("SELECT * FROM {$this->table}");
         $select->execute();
 
@@ -23,7 +23,7 @@ class Cart extends DbConnection
         return $data;
     }
 
-    public function getById($id) {
+    public function findById($id) {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
         $statement = $this->connection->prepare($sql);
         $statement->bindParam(":id", $id, PDO::PARAM_INT);
@@ -35,7 +35,7 @@ class Cart extends DbConnection
         return false;
     }
 
-    public function getByProductId($productId) {
+    public function findByProductId($productId) {
         $sql = "SELECT * FROM {$this->table} WHERE product_id = :id";
         $statement = $this->connection->prepare($sql);
         $statement->bindParam(":id", $productId, PDO::PARAM_INT);
