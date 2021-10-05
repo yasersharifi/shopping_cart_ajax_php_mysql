@@ -1,3 +1,11 @@
+<?php
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+error_reporting(E_ALL);
+include_once "Cart.php";
+$cartObject = new Cart();
+$cartItems = $cartObject->findAll();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,7 +36,7 @@
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="cart.html">Cart</a>
+                    <a class="nav-link" href="cart.php">Cart</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -99,12 +107,13 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <?php if (! empty($cartItems)): foreach ($cartItems as $item): ?>
                                         <tr>
                                             <td>
                                                 <div class="product-item d-flex">
-                                                    <a class="product-thumb" href="#"><img src="assets/images/1.jpeg" class="yas-border-radius-5" height="100"  alt="Product"></a>
+                                                    <a class="product-thumb" href="#"><img src="assets/images/<?= $item->image; ?>" class="yas-border-radius-5" height="100"  alt="Product"></a>
                                                     <div class="product-info ms-4 d-flex flex-column justify-content-center">
-                                                        <h4 class="product-title"><a href="#" class="text-decoration-none text-secondary">Acer Aspire F15</a></h4>
+                                                        <h4 class="product-title"><a href="#" class="text-decoration-none text-secondary"><?= $item->name; ?></a></h4>
                                                         <span><em>Size:</em> 10.5</span>
                                                         <span><em>Color:</em> Dark Blue</span>
                                                     </div>
@@ -112,65 +121,18 @@
                                             </td>
                                             <td class="text-center align-middle">
                                                 <div class="count-input">
-                                                    <input type="number" class="form-control yas-box-shadow-unset" style="width: 100px; margin: 0 auto">
+                                                    <input type="number" value="<?= $item->quantity; ?>" class="form-control yas-box-shadow-unset" style="width: 100px; margin: 0 auto">
                                                 </div>
                                             </td>
-                                            <td class="text-center text-lg text-medium align-middle">$43.90</td>
-                                            <td class="text-center text-lg text-medium align-middle">$18.00</td>
+                                            <td class="text-center text-lg text-medium align-middle subTotal">$<?= number_format($item->price); ?></td>
+                                            <td class="text-center text-lg text-medium align-middle">$<?= number_format($item->price * $item->quantity); ?></td>
                                             <td class="text-center align-middle">
                                                 <a class="remove-from-cart" href="#" data-toggle="tooltip" title="" data-original-title="Remove item">
                                                     <i class="bi bi-trash-fill text-danger"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="product-item d-flex">
-                                                    <a class="product-thumb" href="#"><img src="assets/images/2.jpeg" class="yas-border-radius-5" height="100"  alt="Product"></a>
-                                                    <div class="product-info ms-4 d-flex flex-column justify-content-center">
-                                                        <h4 class="product-title"><a href="#" class="text-decoration-none text-secondary">Acer Aspire F15</a></h4>
-                                                        <span><em>Size:</em> 10.5</span>
-                                                        <span><em>Color:</em> Dark Blue</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <div class="count-input">
-                                                    <input type="number" class="form-control yas-box-shadow-unset" style="width: 100px; margin: 0 auto">
-                                                </div>
-                                            </td>
-                                            <td class="text-center text-lg text-medium align-middle">$43.90</td>
-                                            <td class="text-center text-lg text-medium align-middle">$18.00</td>
-                                            <td class="text-center align-middle">
-                                                <a class="remove-from-cart" href="#" data-toggle="tooltip" title="" data-original-title="Remove item">
-                                                    <i class="bi bi-trash-fill text-danger"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="product-item d-flex">
-                                                    <a class="product-thumb" href="#"><img src="assets/images/3.jpeg" class="yas-border-radius-5" height="100"  alt="Product"></a>
-                                                    <div class="product-info ms-4 d-flex flex-column justify-content-center">
-                                                        <h4 class="product-title"><a href="#" class="text-decoration-none text-secondary">Acer Aspire F15</a></h4>
-                                                        <span><em>Size:</em> 10.5</span>
-                                                        <span><em>Color:</em> Dark Blue</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center align-middle">
-                                                <div class="count-input">
-                                                    <input type="number" class="form-control yas-box-shadow-unset" style="width: 100px; margin: 0 auto">
-                                                </div>
-                                            </td>
-                                            <td class="text-center text-lg text-medium align-middle">$43.90</td>
-                                            <td class="text-center text-lg text-medium align-middle">$18.00</td>
-                                            <td class="text-center align-middle">
-                                                <a class="remove-from-cart" href="#" data-toggle="tooltip" title="" data-original-title="Remove item">
-                                                    <i class="bi bi-trash-fill text-danger"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        <?php endforeach; endif; ?>
                                         </tbody>
                                     </table>
                                 </div>

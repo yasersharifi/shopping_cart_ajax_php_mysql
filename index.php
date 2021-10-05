@@ -38,7 +38,7 @@ $cartCount = $cartObject->countCart();
                     <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="cart.html">Cart</a>
+                    <a class="nav-link" href="cart.php">Cart</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

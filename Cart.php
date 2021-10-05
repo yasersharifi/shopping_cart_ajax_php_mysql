@@ -12,7 +12,7 @@ class Cart extends DbConnection
     }
 
     public function findAll() {
-        $select = $this->connection->prepare("SELECT * FROM {$this->table}");
+        $select = $this->connection->prepare("SELECT * FROM {$this->table} INNER JOIN products ON cart.product_id = products.id");
         $select->execute();
 
         $data = [];
