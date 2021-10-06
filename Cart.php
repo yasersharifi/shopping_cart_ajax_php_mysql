@@ -12,7 +12,7 @@ class Cart extends DbConnection
     }
 
     public function findAll() {
-        $select = $this->connection->prepare("SELECT * FROM {$this->table} INNER JOIN products ON cart.product_id = products.id");
+        $select = $this->connection->prepare("SELECT *, cart.id AS cartID, products.id AS productId FROM {$this->table} INNER JOIN products ON cart.product_id = products.id");
         $select->execute();
 
         $data = [];
@@ -83,5 +83,16 @@ class Cart extends DbConnection
         catch (PDOException $error) {
             return false;
         }
+    }
+
+    public function delete($id) {
+        $sql = "DELETE FROM {$this->table} WHERE id = :id";
+        $statement = $this->connection->prepare($sql);
+
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($statement->execute())
+            return true;
+        return false;
     }
 }

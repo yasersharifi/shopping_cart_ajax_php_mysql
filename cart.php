@@ -1,10 +1,28 @@
 <?php
-ini_set("display_errors", 1);
-ini_set("display_startup_errors", 1);
-error_reporting(E_ALL);
+session_start();
 include_once "Cart.php";
 $cartObject = new Cart();
 $cartItems = $cartObject->findAll();
+
+// delete from cart
+if (isset($_GET["action"])) {
+    if ($_GET["action"] == "delete" && isset($_GET["cartId"])) {
+        $cartId = $_GET["cartId"];
+        if ($cartObject->delete($cartId) == true) {
+            $_SESSION["msg"] = array(
+                    "success",
+                "Deleted Items successfully."
+            );
+        } else {
+            $_SESSION["msg"] = array(
+                "danger",
+                "Deleted Items un successfully."
+            );
+        }
+        header("Location: cart.php");
+        exit();
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -91,6 +109,13 @@ $cartItems = $cartObject->findAll();
         <div class="card yas-box-shadow-nh border-0">
             <div class="card-body">
                 <div class="row">
+                    <?php if (isset($_SESSION["msg"])): $msg = $_SESSION["msg"]; ?>
+                    <div class="col-12">
+                        <div class="alert alert-<?= $msg[0]; ?>">
+                            <?= $msg[1]; ?>
+                        </div>
+                    </div>
+                    <?php endif; unset($_SESSION["msg"]); ?>
                     <div class="col-12 mb-4">
                         <!-- Shopping Cart-->
                         <div class="card">
@@ -127,7 +152,7 @@ $cartItems = $cartObject->findAll();
                                             <td class="text-center text-lg text-medium align-middle subTotal">$<?= number_format($item->price); ?></td>
                                             <td class="text-center text-lg text-medium align-middle">$<?= number_format($item->price * $item->quantity); ?></td>
                                             <td class="text-center align-middle">
-                                                <a class="remove-from-cart" href="#" data-toggle="tooltip" title="" data-original-title="Remove item">
+                                                <a class="remove-from-cart" href="?action=delete&cartId=<?= $item->cartID; ?>" data-toggle="tooltip" title="" data-original-title="Remove item">
                                                     <i class="bi bi-trash-fill text-danger"></i>
                                                 </a>
                                             </td>
