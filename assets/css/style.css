@@ -35,3 +35,20 @@
     border: 2px solid #ffc107;
     border-radius: 5px;
 }
+.loadingImg {
+    position: absolute;
+    z-index: 1;
+    background: #ffeaea;
+    top: 43%;
+    left: 50%;
+    display: none;
+}
+.loadingDiv {
+    opacity: 0.5;
+}
+.loadingDiv, .loadingDiv button, .loadingDiv *{
+    cursor: not-allowed;
+}
+.loadingDiv button {
+    cursor: wait;
+}

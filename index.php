@@ -188,7 +188,7 @@ $cartCount = $cartObject->countCart();
                 data: {action: "addToCart", productId: productId, quantity: 1},
                 success: function (response) {
                     let data = JSON.parse(response)[0];
-                    console.log(data)
+
                     if (data["status"] == "ok") {
                         $("#message").css({display: "block"});
                         $("#messageDiv").addClass("alert-success");

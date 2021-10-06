@@ -1,14 +1,18 @@
 <?php
 require_once "DbConnection.php";
+include_once "Products.php";
 
 class Cart extends DbConnection
 {
     private $table;
+    private $productObject;
     public function __construct()
     {
         parent::__construct();
 
         $this->table = "cart";
+
+        $this->productObject = new Products();
     }
 
     public function findAll() {
@@ -94,5 +98,32 @@ class Cart extends DbConnection
         if ($statement->execute())
             return true;
         return false;
+    }
+
+    public function updateBatch($data) {
+        try {
+            $this->connection->beginTransaction();
+
+            $sql = "UPDATE {$this->table} SET quantity = :quantity, total_price= :total_price WHERE product_id = :product_id";
+            $statement = $this->connection->prepare($sql);
+            $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+            $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+            $statement->bindParam(':total_price', $total_price, PDO::PARAM_BOOL);
+
+            foreach ($data as $item) {
+                $product_id = $item["productId"];
+                $productPrice = $this->productObject->findById($product_id)->price;
+                $quantity = $item["productQty"];
+                $total_price = $productPrice * $quantity;
+
+                $statement->execute();
+            }
+            $this->connection->commit();
+            return true;
+        }
+        catch (PDOException $error) {
+            $this->connection->rollBack();
+            return false;
+        }
     }
 }
