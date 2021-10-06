@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once "classes/Cart.php";
 $cartObject = new Cart();
 $cartItems = $cartObject->findAll();
@@ -33,7 +32,7 @@ include_once "template/header.php";
 <section id="main">
     <div class="container mt-4">
         <div class="card yas-box-shadow-nh border-0 position-relative">
-            <img class="loadingImg" src="assets/images/loading/loading.gif" width="70" alt="">
+            <img class="loadingImg" src="<?= siteUrl('assets/images/loading/loading.gif') ?>" width="70" alt="">
             <div class="card-body">
                 <div class="row">
                     <?php if (isset($_SESSION["msg"])): $msg = $_SESSION["msg"]; ?>
@@ -109,7 +108,7 @@ include_once "template/header.php";
                                     <div class="column"><a class="btn btn-outline-secondary" href="index.php"><i class="icon-arrow-left"></i>&nbsp;Back to Shopping</a></div>
                                     <div class="column">
                                         <button id="updateCart" class="btn btn-warning text-white"  data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!">Update Cart</button>
-                                        <a class="btn btn-success ms-3" href="#">Checkout</a>
+                                        <a class="btn btn-success ms-3" href="<?= siteUrl('checkout.php'); ?>">Checkout</a>
                                     </div>
                                 </div>
                             </div>
