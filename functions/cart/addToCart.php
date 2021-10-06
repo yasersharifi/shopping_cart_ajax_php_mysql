@@ -1,6 +1,6 @@
 <?php
-include_once "./../../Products.php";
-include_once "./../../Cart.php";
+include_once "./../../classes/Products.php";
+include_once "./../../classes/Cart.php";
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) {
     //request is ajax
     $productsObject = new Products();

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once "Cart.php";
+include_once "classes/Cart.php";
 $cartObject = new Cart();
 $cartItems = $cartObject->findAll();
 

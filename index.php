@@ -1,6 +1,6 @@
 <?php
-include_once "Products.php";
-include_once "Cart.php";
+include_once __DIR__ . "/classes/Products.php";
+include_once __DIR__ . "/classes/Cart.php";
 $productsObject = new Products();
 $productsItem = $productsObject->findAll();
 
