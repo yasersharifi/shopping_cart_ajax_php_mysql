@@ -1,3 +1,4 @@
+<?php include_once "config.php"; ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="assets/css/login/style.css">
+    <link rel="stylesheet" href="<?= siteUrl(); ?>assets/css/login/style.css">
 
 </head>
 <body>
@@ -55,10 +56,10 @@
     </div>
 </section>
 
-<script src="assets/js/login/jquery.min.js"></script>
-<script src="assets/js/login/popper.js"></script>
-<script src="assets/js/login/bootstrap.min.js"></script>
-<script src="assets/js/login/main.js"></script>
+<script src="<?= siteUrl(); ?>assets/js/login/jquery.min.js"></script>
+<script src="<?= siteUrl(); ?>assets/js/login/popper.js"></script>
+<script src="<?= siteUrl(); ?>assets/js/login/bootstrap.min.js"></script>
+<script src="<?= siteUrl(); ?>assets/js/login/main.js"></script>
 
 </body>
 </html>

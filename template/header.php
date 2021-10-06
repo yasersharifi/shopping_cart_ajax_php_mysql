@@ -39,6 +39,7 @@ include_once "config.php";
                         Profile
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="<?= siteUrl('login.php'); ?>"">Login</a></li>
                         <li><a class="dropdown-item" href="#">Dashboard</a></li>
                         <li><a class="dropdown-item" href="#">Change Details</a></li>
                         <li>
