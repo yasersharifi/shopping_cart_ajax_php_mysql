@@ -22,6 +22,13 @@
             </div>
         </div>
         <div class="row justify-content-center">
+            <?php if (isset($_SESSION["msg"])): $msg = $_SESSION["msg"]; ?>
+                <div class="col-12">
+                    <div class="alert alert-<?= $msg[0]; ?>">
+                        <?= $msg[1]; ?>
+                    </div>
+                </div>
+            <?php endif; unset($_SESSION["msg"]); ?>
             <div class="col-md-7 col-lg-5">
                 <div class="login-wrap p-4 p-md-5">
                     <div class="icon d-flex align-items-center justify-content-center bg-warning">

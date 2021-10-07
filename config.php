@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+error_reporting(E_ALL);
+
 defined("SITE_URL") || define("SITE_URL", "http://localhost/shopping_cart_ajax_php_mysql/");
 function siteUrl($url = null) {
     if (! empty($url) && $url != "")
