@@ -7,7 +7,7 @@ class DbConnection
     private $password;
     private $database;
 
-    protected $connection;
+    public $connection;
 
     public function __construct()
     {
