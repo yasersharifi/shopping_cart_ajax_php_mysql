@@ -2,9 +2,11 @@
 include_once "config.php";
 include_once "classes/Users.php";
 include_once "library/Validate.php";
+include_once "library/Hashing.php";
 
 $userObject = new Users();
 $validateObject = new Validate();
+$hashObject = new Hashing();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     $validateObject->rules($_POST["name"], "full name", "required");
@@ -14,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
         $data = array(
             "full_name" => $validateObject->clean($_POST["name"], true),
             "email" => $validateObject->clean($_POST["email"], true),
-            "password" => $validateObject->clean($_POST["password"], true),
+            "password" => $hashObject->myHash($validateObject->clean($_POST["password"], true)),
         );
 
         if ($userObject->insert($data) == true) {
