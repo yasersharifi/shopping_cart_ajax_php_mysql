@@ -3,13 +3,13 @@ require_once "DbConnection.php";;
 
 class Database extends DbConnection
 {
-    public $table;
-    public function __construct()
+    protected string $table;
+    protected function __construct()
     {
         parent::__construct();
     }
 
-    public function get($query) {
+    protected function get($query) : array {
         $query = "SELECT {$query} FROM {$this->table}";
         $select = $this->connection->prepare($query);
         $select->execute();
@@ -22,7 +22,7 @@ class Database extends DbConnection
         return $data;
     }
 
-    public function find($column) {
+    protected function find($column) : array | bool {
         $key = array_key_first($column);
         $value = $column[$key];
 
@@ -37,7 +37,7 @@ class Database extends DbConnection
         return false;
     }
 
-    public function insert($data) {
+    protected function insert($data) : string | bool {
         $dataKeys = implode(", ", array_keys($data));
         $dataKeysWithPrefix = [];
         foreach (array_keys($data) as $value) {
@@ -66,7 +66,7 @@ class Database extends DbConnection
         }
     }
 
-    public function delete($where) {
+    protected function delete($where) : bool {
         if ($this->where($where) == false) {
             return false;
         }
@@ -84,7 +84,7 @@ class Database extends DbConnection
         return false;
     }
 
-    public function where($where) {
+    private function where($where) : bool {
         $key = array_key_first($where);
         $value = $where[$key];
 

@@ -17,3 +17,4 @@ function siteUrl($url = null) {
 include_once "classes/Cart.php";
 $cartObject = new Cart();
 $cartCount = $cartObject->countCart();
+
