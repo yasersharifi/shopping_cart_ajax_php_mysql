@@ -12,9 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
 
     if ($validateObject->run() == true) {
         $data = array(
-            "full_name" => $_POST["name"],
-            "email" => $_POST["email"],
-            "password" => $_POST["password"],
+            "full_name" => $validateObject->clean($_POST["name"], true),
+            "email" => $validateObject->clean($_POST["email"], true),
+            "password" => $validateObject->clean($_POST["password"], true),
         );
 
         if ($userObject->insert($data) == true) {

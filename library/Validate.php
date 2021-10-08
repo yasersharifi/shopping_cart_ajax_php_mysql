@@ -34,10 +34,14 @@ class Validate
         return $this->runValue;
     }
 
-    public function clean($value) : string | bool | int | float {
-        $data = trim($value);
-        $data = stripslashes($data);
-        return htmlspecialchars($data);
+    public function clean($value, $xssFiltering) : string | bool | int | float {
+        $data = $value;
+        if ($xssFiltering == true) {
+            $data = trim($value);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+        }
+        return $data;
     }
 
     // private methods
