@@ -9,14 +9,17 @@ $validateObject = new Validate();
 $hashObject = new Hashing();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
-    $validateObject->rules($_POST["name"], "full name", "required");
-    $validateObject->rules($_POST["email"], "email", "required|validEmail");
+    $validateObject->rules("name", "full name", "required");
+    $validateObject->rules("email", "email", "required|validEmail");
+    $validateObject->rules("password", "password", "required");
+    $validateObject->rules("confPassword", "confirm password", "required|match", "confPassword");
+
 
     if ($validateObject->run() == true) {
         $data = array(
             "full_name" => $validateObject->clean($_POST["name"], true),
             "email" => $validateObject->clean($_POST["email"], true),
-            "password" => $hashObject->myHash($validateObject->clean($_POST["password"], true)),
+            "password" => $hashObject->md5($validateObject->clean($_POST["password"], true)),
         );
 
         if ($userObject->insert($data) == true) {

@@ -39,24 +39,26 @@ class Database extends DbConnection
 
     protected function insert($data) : string | bool {
         $dataKeys = implode(", ", array_keys($data));
+
         $dataKeysWithPrefix = [];
         foreach (array_keys($data) as $value) {
             $dataKeysWithPrefix[] = ":" . $value;
         }
         $dataKeysWithPrefixImplode = implode(", ", $dataKeysWithPrefix);
 
-        $query = "INSERT INTO {$this->table} ($dataKeys) VALUES ($dataKeysWithPrefixImplode)";
+        $query = "INSERT INTO {$this->table} ({$dataKeys}) VALUES ({$dataKeysWithPrefixImplode})";
 
         $insert = $this->connection->prepare($query);
 
         try {
             $this->connection->beginTransaction();
 
+            $executed = [];
             foreach ($data as $key => $value) {
-                $insert->bindParam(":{$key}", $value);
+                $executed[":".$key] = $value;
             }
 
-            $insert->execute();
+            $insert->execute($executed);
 
             $this->connection->commit();
             return true;
