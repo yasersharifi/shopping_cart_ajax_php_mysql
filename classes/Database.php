@@ -22,7 +22,7 @@ class Database extends DbConnection
         return $data;
     }
 
-    protected function find($column) : array | bool {
+    protected function find($column) : array | bool | object {
         $key = array_key_first($column);
         $value = $column[$key];
 
@@ -64,6 +64,7 @@ class Database extends DbConnection
             return true;
         }
         catch (PDOException $error) {
+            $this->connection->rollBack();
             return $error->getMessage();
         }
     }
@@ -84,6 +85,38 @@ class Database extends DbConnection
         if ($statement->execute())
             return true;
         return false;
+    }
+
+    public function update($where, $data) : bool | string {
+        if ($this->where($where) == false) {
+            return false;
+        }
+
+        try {
+            $this->connection->beginTransaction();
+
+            $query = "UPDATE {$this->table} SET ";
+            $executed = [];
+            foreach ($data as $key => $value) {
+                $query .= "{$key}=:{$key}";
+                if (array_key_last($data) != $key) {
+                    $query .=", ";
+                }
+
+                $executed[":".$key] = $value;
+            }
+            $query .= " WHERE id=:id";
+
+            $statement = $this->connection->prepare($query);
+            $statement->execute($executed);
+
+            $this->connection->commit();
+            return true;
+        }
+        catch (PDOException $error) {
+            $this->connection->rollBack();
+            return $error->getMessage();
+        }
     }
 
     private function where($where) : bool {

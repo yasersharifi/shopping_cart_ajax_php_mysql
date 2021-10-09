@@ -1,5 +1,6 @@
 <?php
 include_once "classes/Cart.php";
+
 $cartObject = new Cart();
 $cartItems = $cartObject->findAll();
 $totalPrice = 0;

@@ -41,7 +41,7 @@ class Validate
         return $this->runValue;
     }
 
-    public function clean($value, $xssFiltering) : string | bool | int | float {
+    public function clean($value, $xssFiltering = true) : string | bool | int | float {
         $data = $value;
         if ($xssFiltering == true) {
             $data = trim($value);

@@ -10,6 +10,14 @@ $validateObject = new Validate();
 $hashObject = new Hashing();
 $emailObject = new SendEmail();
 
+// check user is login
+if (isset($_SESSION["userInfo"])) {
+    if ($_SESSION["userInfo"]["isLogin"] == true) {
+        header("Location: index.php");
+        exit();
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     $validateObject->rules("name", "full name", "required");
     $validateObject->rules("email", "email", "required|validEmail");
