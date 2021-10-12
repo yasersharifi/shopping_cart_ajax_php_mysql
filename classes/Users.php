@@ -35,6 +35,14 @@ class Users extends Database
     }
 
     public final function checkLogin() {
+        if ($this->isLogin() == false) {
+            header("Location: login.php");
+            exit();
+        }
+
+    }
+
+    public final function isLogin() : bool {
         if (isset($_SESSION["userInfo"])) {
             if ($_SESSION["userInfo"]["isLogin"] == true) {
                 $userId = $_SESSION["userInfo"]["userId"];
@@ -45,17 +53,17 @@ class Users extends Database
                 $userInfo = $this->find(array("id", $userId));
 
                 if ($userInfo->email != $email || $userInfo->password != $password || $userInfo->status != '1') {
-                    header("Location: login.php");
-                    exit();
+                    return false;
+                } else {
+                    return true;
                 }
+
             } else {
-                header("Location: login.php");
-                exit();
+                return false;
             }
 
         } else {
-            header("Location: login.php");
-            exit();
+            return false;
         }
 
     }

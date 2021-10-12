@@ -18,3 +18,8 @@ include_once "classes/Cart.php";
 $cartObject = new Cart();
 $cartCount = $cartObject->countCart();
 
+// Check user is login
+include_once "classes/Users.php";
+$userObject = new Users();
+$isLogin = $userObject->isLogin();
+

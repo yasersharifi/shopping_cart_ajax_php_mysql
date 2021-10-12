@@ -14,7 +14,7 @@ include_once "config.php";
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="<?= siteUrl('assets/css/style.css'); ?>">
     <link rel="stylesheet" href="<?= siteUrl('assets/css/hover-min.css'); ?>">
-    <title><?= isset($pageTitle) ? $pageTitle : ""; ?> || Yaser Sharifi zade</title>
+    <title><?= $pageTitle ?? ""; ?> || Yaser Sharifi zade</title>
 </head>
 <body>
 <!-- start top header -->
@@ -33,26 +33,34 @@ include_once "config.php";
                 <li class="nav-item">
                     <a class="nav-link" href="cart.php">Cart</a>
                 </li>
+                <?php if ($isLogin == false): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login / Register</a>
+                </li>
+                <?php endif; ?>
+                <?php if ($isLogin == true): ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Profile
+                        Account
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= siteUrl('login.php'); ?>"">Login</a></li>
-                        <li><a class="dropdown-item" href="#">Dashboard</a></li>
-                        <li><a class="dropdown-item" href="#">Change Details</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+
+                            <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#">Change Details</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
+
                     </ul>
                 </li>
+                <?php endif; ?>
             </ul>
             <form class="d-flex">
-                <button class="btn btn-success" type="submit"><i class="bi bi-cart me-2"></i>Cart(<span
+                <a href="cart.php" class="btn btn-success" type="submit"><i class="bi bi-cart me-2"></i>Cart(<span
                         class="cartCount"><?= $cartCount; ?></span>)
-                </button>
+                </a>
             </form>
         </div>
     </div>
