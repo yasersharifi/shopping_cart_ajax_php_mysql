@@ -1,8 +1,21 @@
 <?php
+include_once "config.php";
 include_once "classes/Cart.php";
+include_once "classes/Province.php";
+
 $cartObject = new Cart();
-$cartItems = $cartObject->findAll();
+$cartItems = [];
+if (isset($_COOKIE["cookie_id"])) {
+    $cookieId = $_COOKIE["cookie_id"];
+    if ($cartObject->hasCookieId($cookieId)) {
+        $cartItems = $cartObject->findAll($cookieId);
+    }
+}
 $totalPrice = 0;
+
+// all province
+$provinceObject = new Province();
+$provinceItem = $provinceObject->get("*");
 
 // load header
 $pageTitle = "CheckOut";
@@ -89,8 +102,7 @@ include_once "template/header.php"; ?>
                                         <div class="col-12 col-md-6 mb-3">
                                             <label for="country">Country <span class="text-danger"><sup><b>*</b></sup></span></label>
                                             <select class="custom-select d-block w-100 form-control" id="country" required>
-                                                <option value="">Choose...</option>
-                                                <option>Iran</option>
+                                                <option selected disabled>Iran</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Please select a valid country.
@@ -98,21 +110,25 @@ include_once "template/header.php"; ?>
                                         </div>
                                         <div class="col-12 col-md-6 mb-3">
                                             <label for="state">province <span class="text-danger"><sup><b>*</b></sup></span></label>
-                                            <select class="custom-select d-block w-100 form-control" id="state" required>
+                                            <select class="custom-select d-block w-100 form-control" id="province" required>
                                                 <option value="">Choose...</option>
-                                                <option>California</option>
+                                                <?php if (! empty($provinceItem)): foreach ($provinceItem as $item): ?>
+                                                    <option value="<?= $item->id; ?>"><?= $item->name; ?></option>
+                                                <?php endforeach;endif; ?>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Please provide a valid state.
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6 mb-3">
+                                        <div class="col-12 col-md-6 mb-3" style="position: relative">
                                             <label for="state">City <span class="text-danger"><sup><b>*</b></sup></span></label>
-                                            <select class="custom-select d-block w-100 form-control"  id="state" required>
+                                            <select class="custom-select d-block w-100 form-control"  id="city" disabled required>
                                                 <option value="">Choose...</option>
-                                                <option>California</option>
                                             </select>
+                                            <div class="spinner-border text-danger loadingIcon " role="status" style="position: absolute;top: 42%;left: 43%;display: none">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
                                             <div class="invalid-feedback">
                                                 Please provide a valid state.
                                             </div>
@@ -139,3 +155,31 @@ include_once "template/header.php"; ?>
     </div>
 
 <?php include_once "template/footer.php"; ?>
+<script>
+    $(document).ready(function () {
+        $("#province").on("change", function () {
+            let province = $(this).val();
+            if (province == "" || parseInt(province) == NaN) {
+                return false;
+            }
+            $(".loadingIcon").show();
+            $.ajax({
+                url: "functions/province/findCity.php",
+                method: "POST",
+                data: {action: "findCity", province: province},
+                cache: false,
+                success: function (response) {
+                    let data = JSON.parse(response);
+                    if (data[0]["status"] == "ok") {
+                        $(".loadingIcon").hide();
+                        $("#city").attr("disabled", false);
+                        $("#city").html(data[0]["cities"]);
+                    }
+                },
+                error: function (res) {
+                    console.log(res)
+                }
+            });
+        })
+    });
+</script>

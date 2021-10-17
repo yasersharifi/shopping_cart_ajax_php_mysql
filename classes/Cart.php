@@ -15,9 +15,9 @@ class Cart extends DbConnection
         $this->productObject = new Products();
     }
 
-    public function findAll() {
-        $select = $this->connection->prepare("SELECT *, cart.id AS cartID, products.id AS productId FROM {$this->table} INNER JOIN products ON cart.product_id = products.id");
-        $select->execute();
+    public function findAll($cookieId) {
+        $select = $this->connection->prepare("SELECT *, cart.id AS cartID, products.id AS productId FROM {$this->table} INNER JOIN products ON cart.product_id = products.id WHERE cookie_id = :cookie_id");
+        $select->execute([":cookie_id" => $cookieId]);
 
         $data = [];
 
@@ -51,24 +51,45 @@ class Cart extends DbConnection
         return false;
     }
 
-    public function countCart() {
-        $select = $this->connection->prepare("SELECT COUNT(id) AS count FROM {$this->table} GROUP BY product_id");
-        $select->execute();
+    public function findByCookieId($cookieId, $productId) {
+        $sql = "SELECT * FROM {$this->table} WHERE cookie_id = :id AND product_id = :productId";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindParam(":id", $cookieId, PDO::PARAM_INT);
+        $statement->bindParam(":productId", $productId, PDO::PARAM_INT);
+        $statement->execute();
+        $publisher = $statement->fetch(PDO::FETCH_ASSOC);
 
-        $data = [];
-
-        while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = (object) $row;
-        }
-        return count($data);
+        if ($publisher)
+            return (object) $publisher;
+        return false;
     }
 
-    public function insert($productId, $quantity, $totalPrice) {
+    public function hasCookieId($cookieId) {
+        $sql = "SELECT cookie_id FROM {$this->table} WHERE cookie_id = :cookie_id";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindParam(":cookie_id", $cookieId, PDO::PARAM_INT);
+        $statement->execute();
+
+        if ($statement->rowCount() >= 1)
+            return true;
+        return false;
+    }
+
+    public function countCart($cookieId) {
+        $query = "SELECT COUNT(id) AS count FROM {$this->table} WHERE cookie_id = :cookie_id GROUP BY product_id";
+        $select = $this->connection->prepare($query);
+        $select->execute([":cookie_id" => $cookieId]);
+        return $select->rowCount();
+    }
+
+    public function insert($productId, $quantity, $totalPrice, $cookieId) {
         $sql = "INSERT INTO {$this->table} (product_id, 
                    quantity,
-                   total_price) VALUES (:productId,
+                   total_price, 
+                   cookie_id) VALUES (:productId,
                                          :quantity,
-                                         :totalPrice)";
+                                         :totalPrice,
+                                         :cookie_id)";
 
         $insert = $this->connection->prepare($sql);
 
@@ -78,6 +99,7 @@ class Cart extends DbConnection
             $insert->bindParam(":productId", $productId);
             $insert->bindParam(":quantity", $quantity);
             $insert->bindParam(":totalPrice", $totalPrice);
+            $insert->bindParam(":cookie_id", $cookieId);
 
             $insert->execute();
 
@@ -100,15 +122,16 @@ class Cart extends DbConnection
         return false;
     }
 
-    public function updateBatch($data) {
+    public function updateBatch($data, $cookieId) {
         try {
             $this->connection->beginTransaction();
 
-            $sql = "UPDATE {$this->table} SET quantity = :quantity, total_price= :total_price WHERE product_id = :product_id";
+            $sql = "UPDATE {$this->table} SET quantity = :quantity, total_price= :total_price WHERE product_id = :product_id AND cookie_id = :cookie_id";
             $statement = $this->connection->prepare($sql);
             $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
             $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-            $statement->bindParam(':total_price', $total_price, PDO::PARAM_BOOL);
+            $statement->bindParam(':total_price', $total_price);
+            $statement->bindParam(':cookie_id', $cookieId, PDO::PARAM_STR);
 
             foreach ($data as $item) {
                 $product_id = $item["productId"];

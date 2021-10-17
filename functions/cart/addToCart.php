@@ -1,4 +1,5 @@
 <?php
+include_once "./../../config.php";
 include_once "./../../classes/Products.php";
 include_once "./../../classes/Cart.php";
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) {
@@ -11,18 +12,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if (isset($_POST["action"]) && $_POST["action"] == "addToCart") {
         $productId = $_POST["productId"];
         $quantity = $_POST["quantity"];
+        $cookieId = null;
+        if (isset($_COOKIE["cookie_id"])) {
+            $cookieId = $_COOKIE["cookie_id"];
+            if ($cartObject->hasCookieId($cookieId)) {
+                $cartItems = $cartObject->findAll($cookieId);
+            }
+        } else {
+            $cookieId = md5(session_id());
+            setcookie("cookie_id", $cookieId, COOKIE_EXPIRATION_TIME);
+        }
 
         $productInfo = $productsObject->findById($productId);
         $productPrice = $productInfo->price;
         $totalPrice = $productPrice * $quantity;
 
-        $cartInfo = $cartObject->findByProductId($productId);
+        $cartInfo = $cartObject->findByCookieId($cookieId, $productId);
 
 
 
         if (! $cartInfo == true) {
-            if ($cartObject->insert($productId, $quantity, $totalPrice) == true) {
-                $cartCount = $cartObject->countCart();
+            if ($cartObject->insert($productId, $quantity, $totalPrice, $cookieId) == true) {
+                setcookie("cookie_id", $cookieId, COOKIE_EXPIRATION_TIME);
+                $cartCount = $cartObject->countCart($cookieId);
                 $response = array(
                     "status" => "ok",
                     "message" => "This product added to database successfully",
@@ -30,7 +42,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 );
 
             } else {
-                $cartCount = $cartObject->countCart();
+                $cartCount = $cartObject->countCart($cookieId);
                 $response = array(
                     "status" => "error",
                     "message" => "This product don't added to cart",
@@ -38,7 +50,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 );
             }
         } else {
-            $cartCount = $cartObject->countCart();
+            $cartCount = $cartObject->countCart($cookieId);
             $response = array(
                 "status" => "ok",
                 "message" => "This product has already been added to the cart",

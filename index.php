@@ -1,12 +1,9 @@
 <?php
+include_once "config.php";
 include_once __DIR__ . "/classes/Products.php";
 include_once __DIR__ . "/classes/Cart.php";
 $productsObject = new Products();
 $productsItem = $productsObject->findAll();
-
-// instance of cart
-$cartObject = new Cart();
-$cartCount = $cartObject->countCart();
 
 $pageTitle = "Shop";
 include_once "template/header.php";

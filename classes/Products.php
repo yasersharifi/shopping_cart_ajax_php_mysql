@@ -11,7 +11,7 @@ class Products extends DbConnection
         $this->table = "products";
     }
 
-    public function findAll() {
+    public function findAll() : object | array | bool {
         $select = $this->connection->prepare("SELECT * FROM {$this->table}");
         $select->execute();
 
@@ -23,7 +23,7 @@ class Products extends DbConnection
         return $data;
     }
 
-    public function findById($id) {
+    public function findById($id) : object | array | bool {
         $sql = "SELECT * FROM {$this->table} WHERE id = :id";
         $statement = $this->connection->prepare($sql);
         $statement->bindParam(":id", $id, PDO::PARAM_INT);

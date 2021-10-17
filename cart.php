@@ -1,8 +1,17 @@
 <?php
+include_once "config.php";
 include_once "classes/Cart.php";
 
 $cartObject = new Cart();
-$cartItems = $cartObject->findAll();
+$cookieId = null;
+$cartItems = [];
+if (isset($_COOKIE["cookie_id"])) {
+    $cookieId = $_COOKIE["cookie_id"];
+    if ($cartObject->hasCookieId($cookieId)) {
+        $cartItems = $cartObject->findAll($cookieId);
+    }
+}
+
 $totalPrice = 0;
 
 // delete from cart

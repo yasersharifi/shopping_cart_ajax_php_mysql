@@ -1,4 +1,5 @@
 <?php
+include_once "./../../config.php";
 include_once "./../../classes/Products.php";
 include_once "./../../classes/Cart.php";
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) {
@@ -10,7 +11,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     if (isset($_POST["action"]) && $_POST["action"] == "updateCart") {
         $data = $_POST["data"];
-        if ($cartObject->updateBatch($data)) {
+        $cookie_id = md5(session_id());
+        if ($cartObject->updateBatch($data, $cookie_id)) {
             $response = array(
                 "status" => "ok",
                 "message" => "Updated cart successfully.",
